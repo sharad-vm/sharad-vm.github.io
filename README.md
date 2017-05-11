@@ -30,7 +30,7 @@ For more details see [GitHub Flavored Markdown](https://guides.github.com/featur
 
 ### Projects
 
-- Titanic(https://sharad-vm.github.io/titanic.html)
+- [Titanic](https://sharad-vm.github.io/titanic.html)
 
 ### Support or Contact
 
