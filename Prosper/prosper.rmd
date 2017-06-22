@@ -11,7 +11,8 @@ options(width = 500)
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(out.width='900px', dpi=200, echo = TRUE)
+knitr::opts_chunk$set(out.width='900px', dpi=200, echo = FALSE, 
+                      message=FALSE, warning=FALSE)
 ```
 
 ## Introduction
@@ -24,7 +25,7 @@ I've used a subset of Prosper's loan data to analyze different variables, and pr
 ### Structure of the dataset
 There are 113,937 loans in the dataset with 81 features (LoanOriginalAmount, LoanOriginationDates, BorrowerRate, LenderYield, etc., being some of them).
 
-```{r load packages, echo=FALSE, message=FALSE, warning=FALSE}
+```{r load packages}
 #Gets and loads all the packages needed for this analysis
 
 packagesneeded <- c("ggplot2", "dplyr", "RColorBrewer", "plotly")
@@ -95,48 +96,77 @@ pl[order(pl$LoanOriginationDate),]$CumulativeLoanAmount <- cumsum(pl[order(pl$Lo
 
 pl$CumulativePayments <- NA
 
-pl[order(pl$LoanOriginationDate),]$CumulativePayments <- cumsum(pl[order(pl$LoanOriginationDate),"LP_CustomerPayments"])
+pl[order(pl$LoanOriginationDate),]$CumulativePayments <- 
+  cumsum(pl[order(pl$LoanOriginationDate),"LP_CustomerPayments"])
 
 pl$ListingCategory..numeric. <- factor(pl$ListingCategory..numeric.)
 
-ListingCategory <- c('Not Available', 'Debt Consolidation', 'Home Improvement', 'Business',
-                     'Personal Loan', 'Student Use', 'Auto', 'Other', 'Baby & Adoption', 'Boat',
-                     'Cosmetic Procedure', 'Engagement Ring', 'Green Loans', 
-                     'Household Expenses', 'Large Purchases',  'Medical/Dental', 'Motorcycle', 
-                     'RV', 'Taxes', 'Vacation', 'Wedding Loans')
+ListingCategory <- c('Not Available', 'Debt Consolidation', 'Home Improvement',
+                     'Business', 'Personal Loan', 'Student Use', 'Auto', 'Other',
+                     'Baby & Adoption', 'Boat', 'Cosmetic Procedure', 
+                     'Engagement Ring', 'Green Loans',  'Household Expenses',
+                     'Large Purchases',  'Medical/Dental', 'Motorcycle', 'RV',
+                     'Taxes', 'Vacation', 'Wedding Loans')
 
 pl$ListingCategory <- ListingCategory[pl$ListingCategory..numeric.]
 
 #For use in Bivariate analysis
-pl$MainLoanStatus <- ifelse(pl$LoanStatus == "Completed" | pl$LoanStatus == "Current" |
-                             pl$LoanStatus == "FinalPaymentInProgress" , "Paid/Current",
-                     "Unpaid/Delayed")
+pl$MainLoanStatus <- ifelse(pl$LoanStatus == "Completed" | 
+                            pl$LoanStatus == "Current" |
+                            pl$LoanStatus == "FinalPaymentInProgress" , 
+                            "Paid/Current",
+                            "Unpaid/Delayed")
 
 pl$MeanCreditScore <- (pl$CreditScoreRangeUpper + pl$CreditScoreRangeLower)/2
 
 #Necessary variables for correlation plot
-variables <- c(pl$BorrowerAPR, pl$LenderYield, pl$EstimatedLoss, pl$ProsperRating..Alpha., pl$EmploymentStatus, pl$DebtToIncomeRatio, pl$StatedMonthlyIncome, pl$LoanOriginalAmount, pl$MainLoanStatus, pl$MeanCreditScore)
+variables <- c(pl$BorrowerAPR, pl$LenderYield, pl$EstimatedLoss, 
+               pl$ProsperRating..Alpha., pl$EmploymentStatus, 
+               pl$DebtToIncomeRatio, pl$StatedMonthlyIncome, 
+               pl$LoanOriginalAmount, pl$MainLoanStatus, pl$MeanCreditScore)
 
 #Calculating actual returns
-pl$ActualReturn <- (pl$LP_CustomerPayments - pl$LoanOriginalAmount) / pl$LoanOriginalAmount
+pl$ActualReturn <- ((pl$LP_CustomerPayments - pl$LoanOriginalAmount) 
+                    / pl$LoanOriginalAmount)
 
 #Good/Bad Returns
 pl$Returns <- if_else(pl$ActualReturn>0, "Good","Bad")
 
 #State Names
-statenames <- c("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
-                "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
-                "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", 
-                "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York",
-                "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", 
-                "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", 
-                "West Virginia", "Wisconsin", "Wyoming")
+statenames <- c("Alabama", "Alaska", "Arizona", "Arkansas", "California", 
+                "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", 
+                "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", 
+                "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts",
+                "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana",
+                "Nebraska", "Nevada", "New Hampshire", "New Jersey", 
+                "New Mexico", "New York", "North Carolina", "North Dakota", 
+                "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", 
+                "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah",
+                "Vermont", "Virginia", "Washington","West Virginia", "Wisconsin",
+                "Wyoming")
 
 #Re-ordering the factors on loan quarters
-pl$LoanOriginationQuarter <- factor(pl$LoanOriginationQuarter, levels = c("Q4 2005","Q1 2006", "Q2 2006", "Q3 2006", "Q4 2006", "Q1 2007", "Q2 2007", "Q3 2007", "Q4 2007", "Q1 2008", "Q2 2008", "Q3 2008", "Q4 2008", "Q1 2009", "Q2 2009", "Q3 2009", "Q4 2009", "Q1 2010", "Q2 2010", "Q3 2010", "Q4 2010", "Q1 2011", "Q2 2011", "Q3 2011", "Q4 2011", "Q1 2012", "Q2 2012", "Q3 2012", "Q4 2012", "Q1 2013", "Q2 2013", "Q3 2013", "Q4 2013", "Q1 2014", "Q2 2014", "Q3 2014", "Q4 2014"))
+pl$LoanOriginationQuarter <- factor(pl$LoanOriginationQuarter, 
+                                    levels = c("Q4 2005","Q1 2006", "Q2 2006", 
+                                               "Q3 2006", "Q4 2006", "Q1 2007", 
+                                               "Q2 2007", "Q3 2007", "Q4 2007", 
+                                               "Q1 2008", "Q2 2008", "Q3 2008", 
+                                               "Q4 2008", "Q1 2009", "Q2 2009", 
+                                               "Q3 2009", "Q4 2009", "Q1 2010", 
+                                               "Q2 2010", "Q3 2010", "Q4 2010", 
+                                               "Q1 2011", "Q2 2011", "Q3 2011", 
+                                               "Q4 2011", "Q1 2012", "Q2 2012", 
+                                               "Q3 2012", "Q4 2012", "Q1 2013", 
+                                               "Q2 2013", "Q3 2013", "Q4 2013", 
+                                               "Q1 2014", "Q2 2014", "Q3 2014", 
+                                               "Q4 2014"))
 
 #Re-ordering the factors on income range
-pl$IncomeRange <- factor(pl$IncomeRange, levels = c("Not employed", "$0", "$1-24,999", "$25,000-49,999", "$50,000-74,999", "$75,000-99,999", "$100,000+", "Not displayed"))
+pl$IncomeRange <- factor(pl$IncomeRange, levels = c("Not employed", "$0", 
+                                                    "$1-24,999", "$25,000-49,999", 
+                                                    "$50,000-74,999", 
+                                                    "$75,000-99,999", "$100,000+",
+                                                    "Not displayed"))
 
 ```
 ### Univariate Plots
@@ -363,7 +393,8 @@ Similar results here. Very few borrowers seems have benefitted from a loan by th
 
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
 #Re-ordering the Propser credit grades
-pl$ProsperRating..Alpha.<-factor(pl$ProsperRating..Alpha., levels=c("AA", "A", "B", "C", "D", "E", "HR")) 
+pl$ProsperRating..Alpha.<-factor(pl$ProsperRating..Alpha., 
+                                 levels=c("AA", "A", "B", "C", "D", "E", "HR")) 
 
 ggplot(aes(ProsperRating..Alpha.,MeanCreditScore), data = pl) + 
   geom_boxplot() +
@@ -377,7 +408,8 @@ Lets consider the current business model and filter out the records with missing
 
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
 
-ggplot(aes(ProsperRating..Alpha.,MeanCreditScore), data = subset(pl,ProsperRating..Alpha.!="")) + 
+ggplot(aes(ProsperRating..Alpha.,MeanCreditScore), 
+       data = subset(pl,ProsperRating..Alpha.!="")) + 
   geom_boxplot() +
   labs (x = "Prosper Rating",y = "Mean Credit Score") +
   theme(text = element_text(size=8.5))
@@ -389,7 +421,8 @@ Lets add Prosper Score to this plot and analyze a little later.
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
 by(pl$LenderYield*100, pl$ProsperRating..Alpha., summary)
 
-ggplot(aes(ProsperRating..Alpha.,LenderYield*100), data = subset(pl,ProsperRating..Alpha.!="")) + 
+ggplot(aes(ProsperRating..Alpha.,LenderYield*100), 
+       data = subset(pl,ProsperRating..Alpha.!="")) + 
   geom_boxplot() +
   labs (x = "Prosper Rating",y = "Lender Yield (%)") +
   theme(text = element_text(size=8.5))
@@ -422,12 +455,13 @@ To look at the bulk of the points, I limited debt to income ration to less than 
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
 by(pl$CurrentDelinquencies, pl$ProsperRating..Alpha., summary)
 
-ggplot(aes(CurrentDelinquencies, fill = ProsperRating..Alpha.), data = pl) + 
+ggplot(aes(CurrentDelinquencies, fill = ProsperRating..Alpha.), 
+       data = subset(pl,ProsperRating..Alpha. !="")) + 
   geom_density(alpha = 0.75) + 
   facet_wrap(~ProsperRating..Alpha., scales = "free", ncol = 2) +
-  scale_fill_brewer(palette="Set1") +
-  labs (x = "Current Delinquencies",y = "Prosper Rating") +
-  theme(text = element_text(size=8.5)) +
+  scale_fill_brewer(palette="RdYlGn", direction = -1) +
+  labs (x = "Current Delinquencies", y = "Density") +
+  theme(legend.position="none", text = element_text(size=8.5)) +
   guides(fill=guide_legend(title="Prosper Rating"))
 ``` 
 As expected, there seems to be a pattern here. Borrowers with more delinquencies have poorer credit rating assigned by Prosper. And as the saying goes, "Correlation doesn't mean causation". 
@@ -445,10 +479,11 @@ I've created a variable called main loan status that classifies whether a loan i
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
 cor.test(pl$CurrentDelinquencies, pl$BorrowerAPR, method=c("pearson"))
 
-ggplot(aes(CurrentDelinquencies,BorrowerAPR*100, color = ProsperRating..Alpha.), data = pl) + 
+ggplot(aes(CurrentDelinquencies,BorrowerAPR*100, color = ProsperRating..Alpha.),
+       data = pl) + 
   geom_point(alpha = 0.8) +
   scale_x_sqrt() +
-  scale_colour_brewer(palette="Set2") +
+  scale_colour_brewer(palette="RdYlGn", direction = -1) +
   labs (x = "Current Delinquencies",y = "Borrower APR(%)") +
   theme(text = element_text(size=8.5)) +
   guides(fill=guide_legend(title="Prosper Rating"))
@@ -459,10 +494,11 @@ Since current delinquencies has a good linear relation with Prosper Rating and P
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
 cor.test(pl$AmountDelinquent, pl$BorrowerAPR, method=c("pearson"))
 
-ggplot(aes(AmountDelinquent,BorrowerAPR*100, color = ProsperRating..Alpha.), data = pl) + 
+ggplot(aes(AmountDelinquent,BorrowerAPR*100, color = ProsperRating..Alpha.),
+       data = subset(pl, ProsperRating..Alpha. !="")) + 
   geom_point(alpha = 0.8) +
   scale_x_sqrt() +
-  scale_colour_brewer(palette="Set2") +
+  scale_colour_brewer(palette="RdYlGn", direction = -1) +
   labs (x = "Amount Delinquent",y = "Borrower APR(%)") +
   theme(text = element_text(size=8.5)) +
   guides(fill=guide_legend(title="Prosper Rating"))
@@ -476,9 +512,9 @@ by(pl$DebtToIncomeRatio, pl$IncomeRange, summary)
 ggplot(aes(DebtToIncomeRatio, fill = IncomeRange), data = pl) + 
   geom_density(alpha = 0.75) + 
   facet_wrap(~IncomeRange, scales = "free", ncol = 2) +
-  scale_fill_brewer(palette="Set1") +
+  scale_fill_brewer(palette="Greens") +
   labs (x = "Debt to Income Ratio",y = "Income Range") +
-  theme(text = element_text(size=8.5))
+  theme(legend.position="none", text = element_text(size=8.5))
 ```
 
 The income ranges with the least debt to income ratio is $100,000+ and $75,000-99,999. Although $100,000+ has a lower mean and median debt to income ratio, there seems to be very few outliers at 10.01.
@@ -507,7 +543,8 @@ Prosper Score seems to be a decent measure and predictor of a loan turning good 
 ## Multivariate Analysis
 
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
-ggplot(aes(EstimatedReturn,LoanOriginalAmount, color = ProsperRating..Alpha.), data = pl) + 
+ggplot(aes(EstimatedReturn,LoanOriginalAmount, color = ProsperRating..Alpha.),
+       data = pl) + 
   geom_point(alpha = 0.8) +
   labs (x = "Estimated Return",y = "Loan Original Amount") +
   theme(text = element_text(size=8.5)) +
@@ -527,10 +564,12 @@ ggplot(aes(x=LoanOriginationDate), data = completedloans) +
   geom_line(aes(y = CumulativeLoanAmount/1000000, color = "Loan Amount")) + 
   geom_line(aes(y = CumulativePayments/1000000, 
                 color = if_else(CumulativePayments>=CumulativeLoanAmount, 
-                                "Good Customer Payments", "Poor Customer Payments"))) + 
+                                "Good Customer Payments", 
+                                "Poor Customer Payments"))) + 
   scale_color_manual(values=c("green", "blue", "red")) +
   #facet_wrap(~IncomeRange) +
-  labs (x = "Loan Origination Date",y = "Total Loan amount and Payments in Millions") +
+  labs (x = "Loan Origination Date",
+        y = "Total Loan amount and Payments in Millions") +
   theme( text = element_text(size=8.5)) +
   theme(legend.title=element_blank())
 
@@ -540,8 +579,12 @@ I used a subset of dataset that has 'completed' loans for this plot and as I hop
 I wanted to look at those loans and to my surprise, I found quite a few investors that have not received any payments from customers on completed loans. Or, there could be bad or missing data in the data set.
 
 ```{r, echo=TRUE, message=TRUE, warning=FALSE}
-filter(pl,(pl$LoanStatus == "Completed" & pl$CumulativePayments < pl$CumulativeLoanAmount & pl$Returns == "Bad")) %>%
-arrange(LP_CustomerPayments) %>% select(LoanOriginationDate, LoanOriginalAmount, LP_CustomerPayments) %>% head
+filter(pl,(pl$LoanStatus == "Completed" & 
+           pl$CumulativePayments < pl$CumulativeLoanAmount &
+           pl$Returns == "Bad")) %>%
+  arrange(LP_CustomerPayments) %>% 
+  select(LoanOriginationDate, LoanOriginalAmount, LP_CustomerPayments) %>%
+  head
 ```
 
 Here are a few listings that made 0 payments towards the loan and are still considered 'Completed'. One thing they have in common is that they all seemt to be in 2009. Either the borrowers had no intention of paying the money back or this is missing data as this is from Prosper's old business model. 
@@ -572,7 +615,8 @@ I wanted to see if the original loan amount value made a difference to the estim
 I created a variable called Returns to visually represent the estimated return below 0. Estimated return has a very poor correlation with the original loan amount. 
 
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
-ggplot(aes(ActualReturn, LoanOriginalAmount, color = Returns), data = subset(pl,LoanStatus == "Completed")) + 
+ggplot(aes(ActualReturn, LoanOriginalAmount, color = Returns), 
+       data = subset(pl,LoanStatus == "Completed")) + 
   stat_summary(fun.y = "mean", geom = "bar") +
   facet_wrap(~ProsperRating..Alpha., scales ="free") +
   labs (x = "Actual Return",y = "Loan Original Amount") +
@@ -586,7 +630,8 @@ So, I wanted to plot both estimated and actual returns against each other.
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
 cor.test( x=pl$EstimatedReturn, y=pl$ActualReturn, method = "pearson")
 
-ggplot(aes(ActualReturn, EstimatedReturn, color = Returns), data = subset(pl,LoanStatus == "Completed")) + 
+ggplot(aes(ActualReturn, EstimatedReturn, color = Returns), 
+       data = subset(pl,LoanStatus == "Completed")) + 
   geom_point(alpha = 0.75) +
   labs (x = "Actual Return",y = "Estimated Return") +
   theme(text = element_text(size=8.5))
@@ -624,7 +669,8 @@ Looking at the plot above, it is clear that the actual return is not even close 
 #### Plot 1
 
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
-sumStates <- group_by(pl[nchar(as.character(pl$BorrowerState)) > 0,], BorrowerState) %>%
+sumStates <- group_by(pl[nchar(as.character(pl$BorrowerState)) > 0,], 
+                      BorrowerState) %>%
   summarise(., total_issued = round(sum(LoanOriginalAmount/1e6),1), 
             count = n(), avg_debt = round(mean(DebtToIncomeRatio, na.rm = T),1),
             avg_state_income = round(mean(StatedMonthlyIncome),1),
@@ -632,14 +678,22 @@ sumStates <- group_by(pl[nchar(as.character(pl$BorrowerState)) > 0,], BorrowerSt
 
 #sumStates$map_amnt = with(sumStates, pmin(total_issued, 500))
 
-sumStates$hover <- with(sumStates, paste(state.name[match(BorrowerState, state.abb)], '<br>', 
-                                         "Total amount issued:", prettyNum(total_issued, big.mark = ","), 'Million USD <br>',
-                                         "Number of Loans:", prettyNum(count, big.mark = ","), '<br>',
-                                         "Average Debt to Income Ratio:", prettyNum(avg_debt, big.mark = ","), '<br>',
-                                         "Average State Income:", prettyNum(avg_state_income, big.mark = ","), '<br>',
-                                         "Average Borrower APR:", prettyNum(avg_borrowerapr, big.mark = ",")))
+sumStates$hover <- with(sumStates, 
+                        paste(state.name[match(BorrowerState, state.abb)], '<br>', 
+                              "Total amount issued:",
+                                prettyNum(total_issued, big.mark = ","),
+                                'Million USD <br>',
+                              "Number of Loans:", 
+                                prettyNum(count, big.mark = ","), '<br>',
+                              "Average Debt to Income Ratio:", 
+                                prettyNum(avg_debt, big.mark = ","), '<br>',
+                              "Average State Income:", 
+                                prettyNum(avg_state_income, big.mark = ","), '<br>',
+                              "Average Borrower APR:", 
+                                prettyNum(avg_borrowerapr, big.mark = ",")))
 
-g = list(scope = 'usa', projection = list(type = 'albers usa'), showlakes = T, lakecolor = toRGB('white'))
+g = list(scope = 'usa', projection = list(type = 'albers usa'), 
+         showlakes = T, lakecolor = toRGB('white'))
 
 plot_geo(sumStates, locationmode = 'USA-states') %>%
   add_trace(
@@ -661,13 +715,15 @@ The plot shows the total amount of loans issued distributed geographically throu
 #### Plot 2
 
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
-ggplot(aes(BorrowerAPR*100,MeanCreditScore, color = Term), data = subset(pl,MeanCreditScore>100)) + 
+ggplot(aes(BorrowerAPR*100,MeanCreditScore, color = Term), 
+       data = subset(pl,MeanCreditScore>100)) + 
   geom_point(alpha = 0.5) +
-  stat_smooth(method = 'lm', formula = y ~ poly(x,2), aes(colour = Term), se = FALSE) +
+  stat_smooth(method = 'lm', formula = y ~ poly(x,2), 
+              aes(colour = Term), se = FALSE) +
   facet_grid(~Term, scales = "free") +
   ggtitle("Impact of Credit Score on Borrower APR") +
   labs (x = "Borrower APR",y = "Mean Credit Score") +
-  theme(legend.position="bottom", text = element_text(size=8.5))
+  theme(legend.position="none", text = element_text(size=8.5))
 ```
 
 #### Description 2
@@ -677,10 +733,12 @@ This plot shows the relationship between the borrower's mean credit score and AP
 #### Plot 3
 
 ```{r, echo=FALSE, message=TRUE, warning=FALSE}
-ggplot(aes(DebtToIncomeRatio,LenderYield, color = ProsperRating..Alpha.), data = subset(pl,ProsperRating..Alpha.!= "")) + 
+ggplot(aes(DebtToIncomeRatio,LenderYield, color = ProsperRating..Alpha.), 
+       data = subset(pl,ProsperRating..Alpha.!= "")) + 
   geom_point(alpha = 0.8) +
   scale_x_continuous(limits = c(0,1)) +
   scale_y_log10(breaks = c(0.1,0.2,0.3)) +
+  scale_colour_brewer(palette="RdYlGn", direction = -1) +
   ggtitle("Impact of Prosper Rating and Debt to Income Ratio on Lender Yield(log10)") +
   labs (x = "Debt to Income Ratio",y = "Lender Yield") +
   guides(fill=guide_legend(title="Prosper Rating")) +
