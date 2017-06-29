@@ -34,7 +34,7 @@ For more details see [GitHub Flavored Markdown](https://guides.github.com/featur
 - [Open Street Map](https://sharad-vm.github.io/Report.html)
 - [Clover Report](https://sharad-vm.github.io/clover/Analysis.html)
   - [Jump to Dashboard](https://sharad-vm.github.io/clover.md.html)
-- [Digital Ads](https://github.com/sharad-vm/tableau/blob/master/case-studies/digitalads.html)
+- [Digital Ads](https://github.com/sharad-vm/tableau/blob/master/case-studies/digitalads.md.html)
 - [Titanic](https://sharad-vm.github.io/titanic.html)
 
 
