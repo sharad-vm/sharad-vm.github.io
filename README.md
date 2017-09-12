@@ -6,7 +6,7 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 
 ### Markdown
 
-Draw a [bar](https://github.com/sharad-vm/d3-sandbox/blob/master/draw.html) using D3
+Draw a [bar](http://htmlpreview.github.com/?https://github.com/sharad-vm/d3-sandbox/blob/master/draw.html) using D3
 
 ```markdown
 Syntax highlighted code block
