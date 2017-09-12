@@ -6,7 +6,7 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 
 ### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Draw a [bar](https://github.com/sharad-vm/d3-sandbox/blob/master/draw.html) using D3
 
 ```markdown
 Syntax highlighted code block
