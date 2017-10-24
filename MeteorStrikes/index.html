@@ -1,0 +1,420 @@
+<html>
+    <head>
+        <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+        <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>
+        </style>
+        <title>Meteor Strikes</title>
+    </head>
+    <body>
+    <!-- HEADER -->
+	<div class="title">
+		<div>Meteor Strikes</div>
+		<div class="scroll1"> </div>
+		<div class="scroll2"> </div>
+	</div>
+ 
+ 	<div id="map"></div>
+ 	
+<div class="carousel">
+    <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav">
+      <li><a href="#info" class="btn" id="1">Info</a></li>
+      <li><a href="#view" class="btn" id="2">Population Density</a></li>
+      <li><a href="#misc" class="btn" id="3">Facts</a></li>
+    </ul>
+  </div>
+</nav>
+ <div id="D1">
+     <h3>Meteor Strikes</h3>
+     <h4>Description</h4>
+     <p><i>Since 2004, the US has been practicing in a new kind of clandestine 
+         military operation. The justification for using drones to take out 
+         enemy targets is appealing because it removes the risk of losing 
+         American military, it's much cheaper than deploying soldiers, it's 
+         politically much easier to maneuver (i.e. flying a drone within 
+         Pakistan vs. sending troops) and it keeps the world in the dark about 
+         what is actually happening. It takes the conflict out of sight, out of mind. 
+     </i></p>
+    <h4>Population Density View</h4>
+    <p>The first view you see illustrates the attacks by the drones. 
+        We also wanted to give an emphasis on the victims. By clicking on the 
+        Victims link you can see an expanded view of the actual victims with the 
+        total number of attacks and fatalities for each month.
+     </p>
+     <h4>Important Notes</h4>
+     <p>The category of victims we call “OTHER” is classified differently 
+         depending on the source. The Obama administration classifies any 
+         able-bodied male a military combatant unless evidence is brought 
+         forward to prove otherwise.
+     </p>
+     <h4>About the Data</h4>
+     <p>The primary data used in this visualization comes from a dataset 
+         maintained by the Bureau of Investigative Journalism (BIJ) . 
+         The BIJ is a not-for-profit organization with the aim of educating the 
+         public and the media on both the realities of today's world and the 
+         value of honest reporting.
+     </p>
+
+     <h4>Technology</h4>
+      <p>The visualization is created in HTML5 and JavaScript.<p>
+     <h4>Data Sources</h4>
+     <p>The Bureau of Investigative Journalism
+        New America Foundation
+        Living Under Drones (recommended reading)
+        Bing News API
+     </p>
+ </div>
+  <div id="D2">Story</div>
+  <div id="D3">Content</div>
+</div>
+
+<script>
+HideDiv();
+$('.btn').on("click", function() {
+  showHide($(this).prop('id'))
+});
+function showHide(id) {
+  HideDiv();
+  var id = '#D' + id;
+  $(id).show();
+}
+function HideDiv() {
+  $('#D1').hide();
+  $('#D2').hide();
+  $('#D3').hide();
+}
+</script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style type="text/css">
+	.title{
+	z-index: 11;	
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: x-large;
+	position: fixed;
+	background-color: #374E50;
+	color: #908988;
+	height:54px;
+	width: 100%;
+  	left: 0;
+  	top: 0;
+  	opacity: 1;
+  	text-align: left;
+	}
+	
+	#map{
+	margin-left:0px;
+	left: 0px;
+	top:0px;
+	width:70%;
+	height:100%;
+	z-index: 11;
+	padding: 0px;
+	}
+	
+    body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: x-large;
+	color: #908988;
+	font-weight: bold;
+	position: absolute;
+	background-color: #374E50;
+	margin-top:0px;
+	top:0px;
+	padding: 0px;
+	align: left;
+    }
+    
+   .title .scroll1 {
+	z-index: 11;	
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: medium;
+	position: fixed;
+	background-color: orange;
+	color: #908988;
+	height:20px;
+	width: 30%;
+  	opacity: 0.75;
+  	text-align: left;
+  	color: white;
+	}
+	
+	.title .scroll2 {
+	z-index: 11;	
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: medium;
+	position: fixed;
+	background-color: red;
+	color: #908988;
+	height:20px;
+	width: 100%;
+  	opacity: 0.75;
+  	text-align: left;
+  	margin-left:30%;
+  	color: white;
+	}
+	.carousel{
+	z-index: 11;	
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: medium;
+	position: fixed;
+	background-color: rgba(55,78,80,0.6);
+	color: #908988;
+	height:100%;
+	width: 100%;
+  	margin-left: 70%;
+  	top: 54px;
+  	text-align: left;
+	}
+    .carousel .navbar-nav > li > a {
+    padding-top:2px !important; 
+    padding-bottom:2px !important;
+    margin-left: 0%;
+    text-decoration: none;
+    color: #908988;
+    font-size: medium;
+    opacity:0.6;
+    }
+    .carousel .navbar-nav > li:hover {
+    background-color: rgba(55,78,80,0.6);
+    }
+    .navbar {
+        border: 0;
+        min-height:22px !important;
+        background-color: rgba(0,0,0,0.3);
+    }
+    #D1{
+    font-size:small;
+    margin-right:50%;
+    width: 400px;
+    height: 520px;
+    overflow: scroll;
+    overflow-x:hidden;
+    }
+    .btn{
+    font-size:medium;
+    color: #908988;
+    }
+div {
+    display: block;
+}
+scroll1.tooltip {
+    position: absolute; /*very important*/
+    text-align: left;    
+    padding: 5px 10px 5px 10px;
+    font: bold 11px sans-serif;
+    color: white;
+    background: black;
+    border-radius: 8px;  
+    pointer-events: none;
+}
+/* do this or append circles AFTER appending recs */
+rect {
+    pointer-events: none;
+}
+        </style>
+        <script>
+            //Width and height
+            var w = 700;
+            var h = 600;
+            //Define map projection
+            var projection = d3.geo.mercator()
+                                   .translate([w/2, h/1.72])
+                                   .scale([100]);
+            //Define path generator
+            var path = d3.geo.path()
+                             .projection(projection);
+                             
+            
+            var init = 0;
+            
+            var canvas = d3.select("#map")
+                        .append("div")   
+                        .attr("class", "tooltip")               
+                        .style("opacity", 0);
+            
+            //Create SVG element
+            var svg = d3.select("#map")
+                        .append("svg")
+                        .attr({width:w, height: h});
+            
+            var zoom = d3.behavior.zoom()
+                        .scaleExtent([1, 30])
+                        .on("zoom", zoomed);
+                                    
+            function zoomed() {
+            svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            }
+            //Load in GeoJSON data
+            d3.json("world_countries.json", function(error, json) {
+                
+                d3.csv("popdensity.csv", function(error, csv) {
+                var world = json.features;
+                csv.forEach(function(d) {
+                world.forEach(function(e) {
+                if (d.CountryCode === e.id) {
+                    e.pop = d.Pop;
+                }
+            });
+        });
+                //Bind data and create one path per GeoJSON feature
+                svg.selectAll("path")
+                   .data(json.features)
+                   .enter()
+                   .append("path")
+                   .attr("d", path)
+                   .attr("fill","#908988")
+                   .call(zoom);
+                   
+                 $(document).ready(function() {
+                $("#2").click(function(){
+                //alert("clicked");
+                svg.selectAll("path")
+                .style("fill-opacity", function(d, i) {
+               return Math.sqrt(+d.pop)/20;
+            });
+    }); 
+});
+              //Load in meteorite data
+              d3.csv("meteorite-landings.csv", function(data) {
+                
+            
+             var sorted = data.sort(function(a, b) {
+                return d3.ascending(a.year, b.year); 
+             });
+                
+             var meteors = svg.selectAll("circle")
+                   .data(sorted)
+                   .enter()
+                   .append("circle")
+                   .attr("cx", function(d) {
+                     return projection([d.reclong, d.reclat])[0];
+                   })
+                   .attr("cy", init)
+                   .attr("r", 3)
+                   .attr("fill", "#908988")
+                   .attr("opacity", 0)
+                   .on("mouseover", function(d) {      
+                        canvas.transition()        
+                            .duration(200)      
+                            .style("opacity", .8);      
+                        canvas.html(d.name + "<br/>"  + d.year)  
+                            .style("left", (d3.event.pageX) + "px")     
+                            .style("top", (d3.event.pageY - 50) + "px");    
+                    
+                       d3.select(this)
+                            .style("opacity", .9)
+                            .attr("r", function(d) {
+                    return Math.sqrt(parseInt(d.mass)* 0.00007/3.14);
+                   });
+                   })                  
+                    .on("mouseout", function(d) {       
+                        canvas.transition()        
+                            .duration(500)      
+                            .style("opacity", 0); 
+                        
+                        d3.select(this)   
+                            .style("opacity", 0.5)
+                            .attr("r", function(d) {
+                    return Math.sqrt(parseInt(d.mass)* 0.00005/3.14);
+                   });
+                });
+                    
+    
+                   meteors.transition()
+                   .duration(function(d,i){return 3*((i/5)+1);})
+                   .delay(function(d,i){return 15*(i+1);})
+                   //.duration(function(d,i){return 30*projection([d.reclong, d.reclat])[1];})
+                   .attr("cy", function(d) {
+                     return projection([d.reclong, d.reclat])[1];
+                   })
+                   .attr("r", function(d) {
+                    return Math.sqrt(parseInt(d.mass)* 0.00005/3.14);
+                   })
+                   .attr("fill", function(d) {
+                       if (d.fall == "Fell") 
+                       return "red";
+                       else 
+                       return "orange";
+                   })
+                   .attr("opacity", 0.5);
+                 
+            
+                 meteors.append("svg:title")
+                        .text(function(d) {
+                            return ["Place: " + d.name,
+                                    " Year: " + d.year];
+                        });
+                
+                var count = meteors.size()
+                
+                var fallencount = meteors
+                                .filter(function(d) 
+                                        { return d.fall == "Fell" })
+                                .size()
+                
+                var foundcount = meteors
+                                .filter(function(d) 
+                                        { return d.fall == "Found" })
+                                .size()
+                
+                 var customtween = function tweenText(label, newValue ) {
+                                return function() {
+      // get current value as starting point for tween animation
+                 var currentValue = 0;
+      // create interpolator and do not show nasty floating numbers
+      var i = d3.interpolateRound( currentValue, newValue );
+      return function(t) {
+        this.textContent = label + i(t);
+      };
+    };
+  };
+                d3.select(".scroll1")
+                    .append("div")
+                    .text(0)
+                    .transition()
+                    .duration(fallencount*2.5 )
+                    .tween('text', customtween("Observed: ",fallencount));
+                    
+                d3.select(".scroll2")
+                    .append("div")
+                    .text(0)
+                    .transition()
+                    .duration( foundcount*3 )
+                    .tween('text', customtween("Found: ",foundcount));
+    
+    //.text("Observed: 12")
+                   //Add title
+                 //d3.select("h4")
+                 //   .text("Meteor Strikes" + d.year);
+               
+            var legend = svg.selectAll(".legend")
+      .data(color.domain())
+    .enter().append("div")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+  legend.append("rect")
+      .attr("x", width - 18)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", color);
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function(d) { return d; });
+              });
+});
+            });
+        </script>
+
+    </body>
+</html>
