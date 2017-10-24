@@ -30,6 +30,7 @@ For more details see [GitHub Flavored Markdown](https://guides.github.com/featur
 
 ### Projects
 
+- [Meteor Strikes](https://sharad-vm.github.io/MeteorStrikes/index.html)
 - [Prosper](https://sharad-vm.github.io/Prosper/prosper.html)
 - [Open Street Map](https://sharad-vm.github.io/Report.html)
 - [Clover Report](https://sharad-vm.github.io/clover/Analysis.html)
