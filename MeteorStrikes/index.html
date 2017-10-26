@@ -1,24 +1,27 @@
-<html>
+    <html>
     <head>
         <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-        <script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
         <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></script>
         <style>
         </style>
         <title>Meteor Strikes</title>
     </head>
     <body>
+    <div class="container-fluid page">
+    <div class="row>
+    <div class="col-xs-4">
     <!-- HEADER -->
 	<div class="title">
 		<div>Meteor Strikes</div>
 		<div class="scroll1"> </div>
 		<div class="scroll2"> </div>
 	</div>
+ </div>
+ 
+ <div class="col-xs-8">
  
  	<div id="map"></div>
  	
@@ -50,26 +53,20 @@
         total number of attacks and fatalities for each month.
      </p>
      <h4>Important Notes</h4>
-     <p>The category of victims we call “OTHER” is classified differently 
-         depending on the source. The Obama administration classifies any 
-         able-bodied male a military combatant unless evidence is brought 
-         forward to prove otherwise.
+     <p>a few entries here contain date information that was incorrectly parsed into the NASA database. As a spot check: any date that is before 860 CE or after 2016 are incorrect; these should actually be BCE years. There may be other errors and we are looking for a way to identify them.
+a few entries have latitude and longitude of 0N/0E (off the western coast of Africa, where it would be quite difficult to recover meteorites). Many of these were actually discovered in Antarctica, but exact coordinates were not given. 0N/0E locations should probably be treated as NA.
      </p>
      <h4>About the Data</h4>
-     <p>The primary data used in this visualization comes from a dataset 
-         maintained by the Bureau of Investigative Journalism (BIJ) . 
-         The BIJ is a not-for-profit organization with the aim of educating the 
-         public and the media on both the realities of today's world and the 
-         value of honest reporting.
+     <p>The primary data used in this visualization comes from 
+          NASA's Data Portal, and is based on The Meteoritical Society's 
+          Meteoritical Bulletin Database (this latter database provides additional 
+          information such as meteorite images, links to primary sources, etc.). 
      </p>
-
      <h4>Technology</h4>
-      <p>The visualization is created in HTML5 and JavaScript.<p>
+      <p>The visualization is created using, HTML, D3 and JavaScript.<p>
      <h4>Data Sources</h4>
-     <p>The Bureau of Investigative Journalism
-        New America Foundation
-        Living Under Drones (recommended reading)
-        Bing News API
+     <p>NASA's Data Portal
+        The World Bank
      </p>
  </div>
   <div id="D2">Story</div>
@@ -81,16 +78,20 @@ HideDiv();
 $('.btn').on("click", function() {
   showHide($(this).prop('id'))
 });
+
 function showHide(id) {
   HideDiv();
   var id = '#D' + id;
   $(id).show();
 }
+
 function HideDiv() {
+
   $('#D1').hide();
   $('#D2').hide();
   $('#D3').hide();
 }
+
 </script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <style type="text/css">
@@ -215,19 +216,23 @@ scroll1.tooltip {
     border-radius: 8px;  
     pointer-events: none;
 }
+
 /* do this or append circles AFTER appending recs */
 rect {
     pointer-events: none;
 }
         </style>
         <script>
+
             //Width and height
             var w = 700;
             var h = 600;
+
             //Define map projection
             var projection = d3.geo.mercator()
                                    .translate([w/2, h/1.72])
                                    .scale([100]);
+
             //Define path generator
             var path = d3.geo.path()
                              .projection(projection);
@@ -235,28 +240,31 @@ rect {
             
             var init = 0;
             
-            var canvas = d3.select("#map")
-                        .append("div")   
-                        .attr("class", "tooltip")               
-                        .style("opacity", 0);
+            var zoom = d3.behavior.zoom()
+                        .scaleExtent([1, 30])
+                        .on("zoom", zoomed);
+
+                                    
+            function zoomed() {
+            //svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            svg.attr("transform", "translate(" + -5 + "," + -5 + ")")
+                
+            }
+            
             
             //Create SVG element
             var svg = d3.select("#map")
                         .append("svg")
-                        .attr({width:w, height: h});
-            
-            var zoom = d3.behavior.zoom()
-                        .scaleExtent([1, 30])
-                        .on("zoom", zoomed);
-                                    
-            function zoomed() {
-            svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-            }
+                        .attr({width:w, height: h})
+                        .call(zoom);
+                        
             //Load in GeoJSON data
             d3.json("world_countries.json", function(error, json) {
                 
                 d3.csv("popdensity.csv", function(error, csv) {
+
                 var world = json.features;
+
                 csv.forEach(function(d) {
                 world.forEach(function(e) {
                 if (d.CountryCode === e.id) {
@@ -270,8 +278,8 @@ rect {
                    .enter()
                    .append("path")
                    .attr("d", path)
-                   .attr("fill","#908988")
-                   .call(zoom);
+                   .attr("fill","#908988");
+                   //.call(zoom);
                    
                  $(document).ready(function() {
                 $("#2").click(function(){
@@ -282,6 +290,7 @@ rect {
             });
     }); 
 });
+
               //Load in meteorite data
               d3.csv("meteorite-landings.csv", function(data) {
                 
@@ -302,12 +311,12 @@ rect {
                    .attr("fill", "#908988")
                    .attr("opacity", 0)
                    .on("mouseover", function(d) {      
-                        canvas.transition()        
-                            .duration(200)      
-                            .style("opacity", .8);      
-                        canvas.html(d.name + "<br/>"  + d.year)  
-                            .style("left", (d3.event.pageX) + "px")     
-                            .style("top", (d3.event.pageY - 50) + "px");    
+                        //canvas.transition()        
+                          //  .duration(200)      
+                            //.style("opacity", .8);      
+                        //canvas.html(d.name + "<br/>"  + d.year)  
+                          //  .style("left", (d3.event.pageX) + "px")     
+                            //.style("top", (d3.event.pageY - 50) + "px");    
                     
                        d3.select(this)
                             .style("opacity", .9)
@@ -327,9 +336,9 @@ rect {
                    });
                 });
                     
-    
+
                    meteors.transition()
-                   .duration(function(d,i){return 3*((i/5)+1);})
+                   .duration(function(d,i){return 30*((i/5)+1);})
                    .delay(function(d,i){return 15*(i+1);})
                    //.duration(function(d,i){return 30*projection([d.reclong, d.reclat])[1];})
                    .attr("cy", function(d) {
@@ -371,6 +380,7 @@ rect {
                  var currentValue = 0;
       // create interpolator and do not show nasty floating numbers
       var i = d3.interpolateRound( currentValue, newValue );
+
       return function(t) {
         this.textContent = label + i(t);
       };
@@ -380,14 +390,14 @@ rect {
                     .append("div")
                     .text(0)
                     .transition()
-                    .duration(fallencount*2.5 )
+                    .duration(fallencount*15 )
                     .tween('text', customtween("Observed: ",fallencount));
                     
                 d3.select(".scroll2")
                     .append("div")
                     .text(0)
                     .transition()
-                    .duration( foundcount*3 )
+                    .duration( foundcount*15 )
                     .tween('text', customtween("Found: ",foundcount));
     
     //.text("Observed: 12")
@@ -395,26 +405,15 @@ rect {
                  //d3.select("h4")
                  //   .text("Meteor Strikes" + d.year);
                
-            var legend = svg.selectAll(".legend")
-      .data(color.domain())
-    .enter().append("div")
-      .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-  legend.append("rect")
-      .attr("x", width - 18)
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", color);
-  legend.append("text")
-      .attr("x", width - 24)
-      .attr("y", 9)
-      .attr("dy", ".35em")
-      .style("text-anchor", "end")
-      .text(function(d) { return d; });
               });
-});
-            });
-        </script>
 
+});
+
+            });
+
+        </script>
+    </div>
+    </div>
+    </div>
     </body>
 </html>
