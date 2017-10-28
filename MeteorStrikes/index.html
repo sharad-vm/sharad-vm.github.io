@@ -292,7 +292,7 @@ rect {
 });
 
               //Load in meteorite data
-              d3.csv("meteorite-landings.csv", function(data) {
+              d3.csv("meteorite-landings-trimmed.csv", function(data) {
                 
             
              var sorted = data.sort(function(a, b) {
@@ -339,7 +339,7 @@ rect {
 
                    meteors.transition()
                    //.duration(function(d,i){return 30*((i/5)+1);})
-                   .delay(function(d,i){return 15*(i+1);})
+                   .delay(function(d,i){return 5*(i+1);})
                    .duration(function(d,i){return 30*projection([d.reclong, d.reclat])[1];})
                    .attr("cy", function(d) {
                      return projection([d.reclong, d.reclat])[1];
@@ -390,14 +390,14 @@ rect {
                     .append("div")
                     .text(0)
                     .transition()
-                    .duration(fallencount*15 )
+                    .duration((count+1)*5  )
                     .tween('text', customtween("Observed: ",fallencount));
                     
                 d3.select(".scroll2")
                     .append("div")
                     .text(0)
                     .transition()
-                    .duration( foundcount*15 )
+                    .duration( (count+1)*5 )
                     .tween('text', customtween("Found: ",foundcount));
     
     //.text("Observed: 12")
