@@ -1,13 +1,17 @@
     <html>
     <head>
         <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
         <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></script>
         <style>
         </style>
-        <title>Meteor Strikes</title>
+        <title>Meteorite Strikes</title>
     </head>
     <body>
     <div class="container-fluid page">
@@ -15,17 +19,11 @@
     <div class="col-xs-4">
     <!-- HEADER -->
 	<div class="title">
-		<div>Meteor Strikes</div>
+		<div>Meteorite Strikes</div>
 		<div class="scroll1"> </div>
 		<div class="scroll2"> </div>
 	</div>
- </div>
- 
- <div class="col-xs-8">
- 
- 	<div id="map"></div>
- 	
-<div class="carousel">
+	<div class="carousel">
     <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <ul class="nav navbar-nav">
@@ -35,43 +33,98 @@
     </ul>
   </div>
 </nav>
- <div id="D1">
-     <h3>Meteor Strikes</h3>
+ <div id="D1" class = "buttons">
+     <h3>Meteorite Strikes</h3>
      <h4>Description</h4>
-     <p><i>Since 2004, the US has been practicing in a new kind of clandestine 
-         military operation. The justification for using drones to take out 
-         enemy targets is appealing because it removes the risk of losing 
-         American military, it's much cheaper than deploying soldiers, it's 
-         politically much easier to maneuver (i.e. flying a drone within 
-         Pakistan vs. sending troops) and it keeps the world in the dark about 
-         what is actually happening. It takes the conflict out of sight, out of mind. 
+     <p><i>A meteorite is a meteoroid (a piece of an asteroid or comet) that 
+        survives the passage through the Earth's atmosphere and lands on the earth. 
+        Almost everyday our planet is bombarded with tons of small particles and dust
+        some of which our atmosphere protects our planet from.
+        About once a year, an automobile-sized asteroid hits Earth's atmosphere, 
+        creates an impressive fireball, and burns up before reaching the surface.
+        Every 2,000 years or so, a meteoroid the size of a football field hits 
+        Earth and causes significant damage to the area.
+        Only once every few million years, an object large enough to threaten 
+        Earth's civilization comes along. Impact craters on Earth, the moon and 
+        other planetary bodies are evidence of these occurrences.
+        Space rocks smaller than about 25 meters (about 82 feet) will most 
+        likely burn up as they enter the Earth's atmosphere and cause little or 
+        no damage.
+        If a rocky meteoroid larger than 25 meters but smaller than one kilometer
+        ( a little more than 1/2 mile) were to hit Earth, it would likely cause 
+        local damage to the impact area.
+        We believe anything larger than one to two kilometers (one kilometer is 
+        a little more than one-half mile) could have worldwide effects. 
+        At 5.4 kilometers in diameter, the largest known potentially hazardous 
+        asteroid is Toutatis. 
      </i></p>
-    <h4>Population Density View</h4>
-    <p>The first view you see illustrates the attacks by the drones. 
-        We also wanted to give an emphasis on the victims. By clicking on the 
-        Victims link you can see an expanded view of the actual victims with the 
-        total number of attacks and fatalities for each month.
-     </p>
      <h4>Important Notes</h4>
-     <p>a few entries here contain date information that was incorrectly parsed into the NASA database. As a spot check: any date that is before 860 CE or after 2016 are incorrect; these should actually be BCE years. There may be other errors and we are looking for a way to identify them.
-a few entries have latitude and longitude of 0N/0E (off the western coast of Africa, where it would be quite difficult to recover meteorites). Many of these were actually discovered in Antarctica, but exact coordinates were not given. 0N/0E locations should probably be treated as NA.
+     <p>The original data set had entries for over 45000 meteorites. 
+        After processing the data for sanity, the following meteorites
+        were excluded from the visualization which finally resulted in about 
+        34000 meteorites.
+     <ul>
+     <li>A few entries here contain date information that was incorrectly parsed 
+         into the NASA database and so any date that is before 860 CE or 
+         after 2016 are incorrect and have been trimmed.</li>
+     <li>A few entries have latitude and longitude of 0N/0E 
+         (off the western coast of Africa, where it would be quite difficult 
+         to recover meteorites). Many of these were actually discovered in 
+         Antarctica, but exact coordinates were not given. 
+         0N/0E locations have been excluded from this visualization.</li>
+     <li>There may be other discrepancies that have not been identified yet.</li>
+     <li>In the population density view, the data for some islands and Antarctica 
+         are not available and Antarctica was imputed with a lighter scale value
+         and the rest of the islands were not considered for this imputation.</li>
+     </ul>
      </p>
      <h4>About the Data</h4>
      <p>The primary data used in this visualization comes from 
-          NASA's Data Portal, and is based on The Meteoritical Society's 
-          Meteoritical Bulletin Database (this latter database provides additional 
-          information such as meteorite images, links to primary sources, etc.). 
+        NASA's Data Portal, and is based on The Meteoritical Society's 
+        Meteoritical Bulletin Database (this latter database provides additional 
+        information such as meteorite images, links to primary sources, etc.). 
      </p>
      <h4>Technology</h4>
-      <p>The visualization is created using, HTML, D3 and JavaScript.<p>
+     <p>The visualization is created using, HTML, D3 and JavaScript.<p>
      <h4>Data Sources</h4>
-     <p>NASA's Data Portal
-        The World Bank
+     <p>
+     <ul>
+     <li><a href="https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh">
+     NASA's Data Portal</a>
+     </li>
+     <li><a href="https://data.worldbank.org/indicator/EN.POP.DNST">
+     The World Bank</a>
+     </li>
+     </ul>
      </p>
  </div>
-  <div id="D2">Story</div>
-  <div id="D3">Content</div>
+  <div id="D2" class = "buttons">
+     <h4>Population Density View</h4>
+     <p>While the first view illustrates the meteorite strikes on a world map, 
+        I also wanted to give an emphasis on the population density of those 
+        regions to visualize the effect of meteorite strikes on human life.<br><br>
+        This view lightens the areas of the world where population density is 
+        low and vice versa. Antarctica is an exception as based on the scale of 
+        population density, it should not even show up. The population there as
+        of now is mostly floating for research purposes and almost non-existent 
+        in the past. For the purposes of this view though, a lighter scale value
+        has been imputed on Antarctica just to make sense of the map.<br><br> 
+        The data for population density has been taken from the World Bank and 
+        the data used for this particular visualization is from the year 2016. 
+        This might not paint an exact picture of the population density of an area 
+        at the time of the actual meteorite strike, but it definitely gives an idea.
+        Moreover, in most of the countries, population has only been growing 
+        year over year and so, this would work for a worst-case scenario.
+     </p>
+    </div>
+  <div id="D3" class = "buttons">Content</div>
 </div>
+ </div>
+ 
+ <div class="col-xs-8">
+ 
+ 	<div id="map"></div>
+
 
 <script>
 HideDiv();
@@ -191,10 +244,10 @@ function HideDiv() {
         min-height:22px !important;
         background-color: rgba(0,0,0,0.3);
     }
-    #D1{
+    .buttons{
     font-size:small;
-    margin-right:50%;
-    width: 400px;
+    margin-right:70%;
+    max-width: 55%;
     height: 520px;
     overflow: scroll;
     overflow-x:hidden;
@@ -225,7 +278,7 @@ rect {
         <script>
 
             //Width and height
-            var w = 700;
+            var w = 900;
             var h = 600;
 
             //Define map projection
@@ -247,8 +300,6 @@ rect {
                                     
             function zoomed() {
             svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-            //svg.attr("transform", "translate(" + -5 + "," + -5 + ")")
-                
             }
             
             
@@ -266,11 +317,13 @@ rect {
                 var world = json.features;
 
                 csv.forEach(function(d) {
-                world.forEach(function(e) {
-                if (d.CountryCode === e.id) {
-                    e.pop = d.Pop;
-                }
-            });
+                    
+                    world.forEach(function(e) {
+                    if ( d.CountryCode === e.id) {
+                        e.pop = d.Pop;
+                         
+                     }
+                });
         });
                 //Bind data and create one path per GeoJSON feature
                 svg.selectAll("path")
@@ -286,13 +339,25 @@ rect {
                 //alert("clicked");
                 svg.selectAll("path")
                 .style("fill-opacity", function(d, i) {
+                    if (+d.pop>0) {
                return Math.sqrt(+d.pop)/20;
-            });
-    }); 
-});
+                    }
+                    else {
+                    return 0.1;
+                    }
+                        });
+                    }); 
+                });
 
+                $(document).ready(function() {
+                $("#1").click(function(){
+                //alert("clicked");
+                svg.selectAll("path")
+                .style("fill-opacity", 0.95);
+                    }); 
+                });
               //Load in meteorite data
-              d3.csv("meteorite-landings-trimmed.csv", function(data) {
+              d3.csv("meteorite-landings.csv", function(data) {
                 
             
              var sorted = data.sort(function(a, b) {
@@ -325,9 +390,9 @@ rect {
                    });
                    })                  
                     .on("mouseout", function(d) {       
-                        canvas.transition()        
-                            .duration(500)      
-                            .style("opacity", 0); 
+                        //canvas.transition()        
+                          //  .duration(500)      
+                            //.style("opacity", 0); 
                         
                         d3.select(this)   
                             .style("opacity", 0.5)
@@ -337,13 +402,22 @@ rect {
                 });
                     
 
+    
                    meteors.transition()
-                   //.duration(function(d,i){return 30*((i/5)+1);})
-                   .delay(function(d,i){return 5*(i+1);})
+                   .ease("quad")
+                   //.duration(function(d,i){return 3*((i/5)+1);})
+                   .delay(function(d,i){return 15*(i+1);})
                    .duration(function(d,i){return 30*projection([d.reclong, d.reclat])[1];})
                    .attr("cy", function(d) {
                      return projection([d.reclong, d.reclat])[1];
                    })
+                   .attr("r", 3)
+                   .attr("stroke", "whitesmoke")
+                   .attr("opacity", 0.5)
+                   .attr("stroke-width", "0px")
+                   .transition()
+                    .duration(2000)
+                    .attr("stroke-width", "10px")
                    .attr("r", function(d) {
                     return Math.sqrt(parseInt(d.mass)* 0.00005/3.14);
                    })
@@ -353,14 +427,15 @@ rect {
                        else 
                        return "orange";
                    })
-                   .attr("opacity", 0.5);
-                 
-            
-                 meteors.append("svg:title")
-                        .text(function(d) {
+                   .attr("opacity", 0.5)
+                   .transition()
+                    .attr("stroke-width", "0px")
+                    .text(function(d) {
                             return ["Place: " + d.name,
                                     " Year: " + d.year];
                         });
+            
+                        
                 
                 var count = meteors.size()
                 
@@ -390,20 +465,20 @@ rect {
                     .append("div")
                     .text(0)
                     .transition()
-                    .duration((count+1)*5  )
+                    .duration(fallencount*50 )
                     .tween('text', customtween("Observed: ",fallencount));
                     
                 d3.select(".scroll2")
                     .append("div")
                     .text(0)
                     .transition()
-                    .duration( (count+1)*5 )
+                    .duration( foundcount*3 )
                     .tween('text', customtween("Found: ",foundcount));
     
     //.text("Observed: 12")
                    //Add title
                  //d3.select("h4")
-                 //   .text("Meteor Strikes" + d.year);
+                 //   .text("Meteorite Strikes" + d.year);
                
               });
 
